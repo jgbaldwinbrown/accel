@@ -101,9 +101,9 @@ func MaxIndex(fs []float64) int {
 
 func MaxSlopeTimes(afsets []Afs) ([]float64) {
 	out := make([]float64, len(afsets))
-	for _, afs := range afsets {
+	for i, afs := range afsets {
 		xs, ys := SmoothedMeanSlope(afs)
-		out = append(out, xs[MaxIndex(ys)])
+		out[i] = xs[MaxIndex(ys)]
 	}
 	return out
 }
