@@ -4,6 +4,7 @@ import (
 	"sort"
 	"github.com/chewxy/stl/loess"
 	"github.com/montanaflynn/stats"
+	"math"
 )
 
 type Af struct {
@@ -11,6 +12,8 @@ type Af struct {
 	Gen int
 	Af float64
 }
+
+type Afs []Af
 
 type IntSet struct {
 	List []int
@@ -31,7 +34,7 @@ func (s *IntSet) Add(i int) {
 	}
 }
 
-func MeanAfs(afs []Af) (means []float64) {
+func MeanAfs(afs Afs) (means []float64) {
 	gens := NewIntSet()
 	for _, af := range afs {
 		gens.Add(af.Gen)
@@ -60,7 +63,7 @@ func Smooth(fs []float64) []float64 {
 	return y
 }
 
-func SortedGens(afs []Af) (gens []float64) {
+func SortedGens(afs Afs) (gens []float64) {
 	genset := NewIntSet()
 	for _, af := range afs {
 		genset.Add(af.Gen)
@@ -73,7 +76,7 @@ func SortedGens(afs []Af) (gens []float64) {
 	return gens
 }
 
-func SmoothedMeanSlope(afs []Af) ([]float64, []float64) {
+func SmoothedMeanSlope(afs Afs) ([]float64, []float64) {
 	means := MeanAfs(afs)
 	smeans := Smooth(means)
 	gens := SortedGens(afs)
@@ -82,4 +85,25 @@ func SmoothedMeanSlope(afs []Af) ([]float64, []float64) {
 		panic(err)
 	}
 	return splits, slopes
+}
+
+func MaxIndex(fs []float64) int {
+	max := math.Inf(-1)
+	maxi := -1
+	for i, f := range fs {
+		if f > max {
+			max = f
+			maxi = i
+		}
+	}
+	return maxi
+}
+
+func MaxSlopeTimes(afsets []Afs) ([]float64) {
+	out := make([]float64, len(afsets))
+	for _, afs := range afsets {
+		xs, ys := SmoothedMeanSlope(afs)
+		out = append(out, xs[MaxIndex(ys)])
+	}
+	return out
 }
