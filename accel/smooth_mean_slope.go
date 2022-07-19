@@ -76,15 +76,15 @@ func SortedGens(afs Afs) (gens []float64) {
 	return gens
 }
 
-func SmoothedMeanSlope(afs Afs) ([]float64, []float64) {
+func SmoothedMeanSlope(afs Afs) ([]float64, []float64, error) {
 	means := MeanAfs(afs)
 	smeans := Smooth(means)
 	gens := SortedGens(afs)
 	splits, slopes, err := Deriv(gens, smeans)
 	if err != nil {
-		panic(err)
+		return nil, nil, err
 	}
-	return splits, slopes
+	return splits, slopes, nil
 }
 
 func MaxIndex(fs []float64) int {
@@ -99,11 +99,14 @@ func MaxIndex(fs []float64) int {
 	return maxi
 }
 
-func MaxSlopeTimes(afsets []Afs) ([]float64) {
+func MaxSlopeTimes(afsets []Afs) ([]float64, error) {
 	out := make([]float64, len(afsets))
 	for i, afs := range afsets {
-		xs, ys := SmoothedMeanSlope(afs)
+		xs, ys, err := SmoothedMeanSlope(afs)
+		if err != nil {
+			return nil, err
+		}
 		out[i] = xs[MaxIndex(ys)]
 	}
-	return out
+	return out, nil
 }
