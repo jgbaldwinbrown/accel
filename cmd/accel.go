@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"bufio"
-	"../accel"
+	"github.com/jgbaldwinbrown/accel/accel"
 )
 
 func main() {

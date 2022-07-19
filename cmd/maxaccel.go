@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"../accel"
+	"github.com/jgbaldwinbrown/accel/accel"
 )
 
 func main() {
