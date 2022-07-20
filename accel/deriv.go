@@ -6,7 +6,7 @@ import (
 
 func Deriv(x []float64, y []float64) (xout, yout []float64, err error) {
 	if len(x) < 1 {
-		return xout, yout, errors.New("Deriv error: too short.")
+		return xout, yout, nil
 	}
 	if len(x) != len(y) {
 		return xout, yout, errors.New("Deriv error: lengths do not match.")
