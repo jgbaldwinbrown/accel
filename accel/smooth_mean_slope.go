@@ -106,7 +106,11 @@ func MaxSlopeTimes(afsets []Afs) ([]float64, error) {
 		if err != nil {
 			return nil, err
 		}
-		out[i] = xs[MaxIndex(ys)]
+		if len(xs) == 0 {
+			out[i] = math.NaN()
+		} else {
+			out[i] = xs[MaxIndex(ys)]
+		}
 	}
 	return out, nil
 }
