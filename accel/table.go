@@ -1,7 +1,7 @@
 package accel
 
 import (
-	"github.com/jgbaldwinbrown/lscan/lscan"
+	"github.com/jgbaldwinbrown/lscan/pkg"
 	"bufio"
 	"sort"
 	"io"

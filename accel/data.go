@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 	"bufio"
-	"github.com/jgbaldwinbrown/lscan/lscan"
+	"github.com/jgbaldwinbrown/lscan/pkg"
 	"strconv"
 )
 
