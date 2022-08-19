@@ -4,13 +4,17 @@ import (
 	"fmt"
 	"math"
 	"io"
+	"sort"
 )
 
 func Quantile(data []float64, quantile float64) (threshpos int, thresh float64, overthresh []float64) {
-	ly := float64(len(data))
+	sdata := make([]float64, len(data))
+	copy(sdata, data)
+	sort.Float64s(sdata)
+	ly := float64(len(sdata))
 	threshpos = int(math.Ceil(ly * (1 - quantile)))
-	thresh = data[threshpos]
-	overthresh = data[threshpos:]
+	thresh = sdata[threshpos]
+	overthresh = sdata[threshpos:]
 	return
 }
 
