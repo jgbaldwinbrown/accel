@@ -7,15 +7,31 @@ import (
 	"sort"
 )
 
-func Quantile(data []float64, quantile float64) (threshpos int, thresh float64, overthresh []float64) {
+func internalQuantile(data []float64, quantile float64, dir int) (threshpos int, thresh float64, overthresh []float64) {
 	sdata := make([]float64, len(data))
 	copy(sdata, data)
-	sort.Float64s(sdata)
 	ly := float64(len(sdata))
+
+	if dir == 1 {
+		sort.Float64s(sdata)
+		threshpos = int(math.Ceil(ly * (1 - quantile)))
+	} else {
+		sort.Sort(sort.Reverse(sort.Float64Slice(sdata)))
+		threshpos = int(math.Floor(ly * (1 - quantile)))
+	}
+
 	threshpos = int(math.Ceil(ly * (1 - quantile)))
 	thresh = sdata[threshpos]
 	overthresh = sdata[threshpos:]
 	return
+}
+
+func Quantile(data []float64, quantile float64) (threshpos int, thresh float64, overthresh []float64) {
+	return internalQuantile(data, quantile, 1)
+}
+
+func LowQuantile(data []float64, quantile float64) (threshpos int, thresh float64, overthresh []float64) {
+	return internalQuantile(data, quantile, -1)
 }
 
 func CalcQuantileFull(r io.Reader, param float64) {
