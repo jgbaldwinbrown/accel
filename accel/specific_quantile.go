@@ -21,7 +21,11 @@ func internalQuantile(data []float64, quantile float64, dir int) (threshpos int,
 	}
 
 	threshpos = int(math.Ceil(ly * (1 - quantile)))
-	thresh = sdata[threshpos]
+	if threshpos >= len(sdata) {
+		thresh = math.NaN()
+	} else {
+		thresh = sdata[threshpos]
+	}
 	overthresh = sdata[threshpos:]
 	return
 }
