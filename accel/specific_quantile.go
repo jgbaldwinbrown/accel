@@ -44,6 +44,16 @@ func QuantileNoInfNoNaN(data []float64, quantile float64) (threshpos int, thresh
 	return internalQuantile(data_noinf, quantile, 1)
 }
 
+func QuantileNoInfNoNaNNoZeroNoNeg(data []float64, quantile float64) (threshpos int, thresh float64, overthresh []float64) {
+	data_noinf := []float64{}
+	for _, d := range data {
+		if !math.IsNaN(d) && !math.IsInf(d, 0) && d > 0 {
+			data_noinf = append(data_noinf, d)
+		}
+	}
+	return internalQuantile(data_noinf, quantile, 1)
+}
+
 func LowQuantile(data []float64, quantile float64) (threshpos int, thresh float64, overthresh []float64) {
 	return internalQuantile(data, quantile, -1)
 }
